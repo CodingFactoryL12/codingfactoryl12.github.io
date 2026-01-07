@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard – CodingFactoryL</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0d0d0d;
+    color: white;
+}
+
+/* HEADER */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: #000;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-left .logo {
+    color: white;
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.header-right span {
+    margin-right: 15px;
+}
+
+.logout-btn {
+    padding: 8px 18px;
+    background: #ff4d4d;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #000;
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #ff4d4d;
+}
+
+/* DASHBOARD */
+.dashboard-container {
+    max-width: 900px;
+    margin: 100px auto;
+    padding: 40px;
+    background: #111;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(0, 234, 255, 0.1);
+    animation: fadeIn 1s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-container h1 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* BUTTONS */
+.dashboard-btn {
+    width: 100%;
+    padding: 18px;
+    margin-bottom: 20px;
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 12px;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: center;
+}
+
+.dashboard-btn:hover {
+    border-color: #00eaff;
+    box-shadow: 0 0 10px rgba(0, 234, 255, 0.2);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-left">
+        <a href="index.html" class="logo">CodingFactoryL</a>
+    </div>
+
+    <div class="header-right" id="headerStatus">
+        <!-- Wird per JS ersetzt -->
+    </div>
+</header>
+
+<div class="dashboard-container">
+    <h1 id="welcomeText">Willkommen</h1>
+
+    <button class="dashboard-btn" onclick="window.location.href='projects.html'">
+        Projekte ansehen
+    </button>
+
+    <button class="dashboard-btn" onclick="window.location.href='kontakt.html'">
+        Kontakt
+    </button>
+
+    <button class="dashboard-btn" onclick="alert('KI‑Tools kommen später!')">
+        KI‑Tools (bald verfügbar)
+    </button>
+
+    <button class="dashboard-btn" onclick="alert('Admin‑Bereich kommt später!')">
+        Admin‑Bereich (bald verfügbar)
+    </button>
+</div>
+
+<script>
+function loadDashboard() {
+    const user = localStorage.getItem("loggedInUser");
+
+    if (!user) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    document.getElementById("welcomeText").innerText =
+        "Willkommen zurück, " + user;
+
+    document.getElementById("headerStatus").innerHTML = `
+        <span>Eingeloggt als <b>${user}</b></span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    `;
+}
+
+function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "index.html";
+}
+
+loadDashboard();
+</script>
+
+</body>
+</html>
