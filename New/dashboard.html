@@ -272,7 +272,7 @@
             <a href="dashboard.html">Dashboard</a>
             <a href="tools.html">Tools</a>
             <a href="ki.html">KI‑Features</a>
-            <a href="/settingspage.html">Einstellungen</a>
+            <a href="settings.html">Einstellungen</a>
         </nav>
     </aside>
 
@@ -297,54 +297,38 @@
     </main>
 
     <script>
-    // === Sidebar Toggle ===
-    function toggleDashSidebar() {
-        document.querySelector(".dash-sidebar").classList.toggle("active");
-    }
+        function toggleDashSidebar() {
+            document.querySelector(".dash-sidebar").classList.toggle("active");
+        }
 
-    // === LOGIN CHECK ===
-    const loggedInUser = localStorage.getItem("loggedInUser");
+        function logout() {
+            alert("Logout kommt später – aktuell kein Login-System vorhanden.");
+        }
 
-    // Wenn kein User eingeloggt → zurück zum Login
-    if (!loggedInUser) {
-        window.location.href = "login.html";
-    }
+        const welcomeMessages = [
+            "Willkommen zurück, Leon",
+            "Schön dich wieder zu sehen",
+            "Bereit für neue Projekte?",
+            "Was möchtest du heute machen?",
+            "Lass uns etwas Großartiges bauen"
+        ];
 
-    // Benutzername im Header einsetzen
-    document.querySelector(".user-role").textContent = loggedInUser;
+        let welcomeIndex = 0;
+        const welcomeElement = document.getElementById("dynamic-welcome");
 
-    // === LOGOUT ===
-    function logout() {
-        localStorage.removeItem("loggedInUser");
-        window.location.href = "index.html";
-    }
+        function updateWelcome() {
+            welcomeElement.style.opacity = 0;
 
-    // === Dynamische Willkommensnachrichten ===
-    const welcomeMessages = [
-        `Willkommen zurück, ${loggedInUser}`,
-        `Schön dich wieder zu sehen, ${loggedInUser}`,
-        `${loggedInUser}, bereit für neue Projekte?`,
-        `Was möchtest du heute machen, ${loggedInUser}?`,
-        `Lass uns etwas Großartiges bauen, ${loggedInUser}`
-    ];
+            setTimeout(() => {
+                welcomeElement.textContent = welcomeMessages[welcomeIndex];
+                welcomeElement.style.opacity = 1;
+                welcomeIndex = (welcomeIndex + 1) % welcomeMessages.length;
+            }, 600);
+        }
 
-    let welcomeIndex = 0;
-    const welcomeElement = document.getElementById("dynamic-welcome");
-
-    function updateWelcome() {
-        welcomeElement.style.opacity = 0;
-
-        setTimeout(() => {
-            welcomeElement.textContent = welcomeMessages[welcomeIndex];
-            welcomeElement.style.opacity = 1;
-            welcomeIndex = (welcomeIndex + 1) % welcomeMessages.length;
-        }, 600);
-    }
-
-    updateWelcome();
-    setInterval(updateWelcome, 4000);
-</script>
-
+        updateWelcome();
+        setInterval(updateWelcome, 4000);
+    </script>
 
 </body>
 </html>

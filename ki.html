@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>KI‑Features</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .info-box {
+      background: #fff3cd;
+      border-left: 5px solid #ffca2c;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      color: #664d03;
+      font-size: 15px;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      background: #fafafa;
+    }
+
+    .btn {
+      background: #2563eb;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      width: 100%;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+    }
+
+    .explanation {
+      margin-top: 20px;
+      font-size: 15px;
+      color: #444;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>KI‑Features</h1>
+
+  <div class="card">
+
+    <!-- Hinweis -->
+    <div class="info-box">
+      ⚠️ Das KI‑Backend befindet sich derzeit noch in der Entwicklung und wartet auf die Domain‑Freigabe.  
+      Die Funktionen werden bald automatisch aktiviert.
+    </div>
+
+    <!-- Upload -->
+    <label for="imageUpload"><strong>Bild hochladen</strong></label>
+    <input type="file" id="imageUpload" accept="image/*">
+
+    <!-- Button -->
+    <button class="btn" onclick="sendImage()">Senden</button>
+
+    <!-- Erklärung -->
+    <div class="explanation">
+      Dieses KI‑Modul wird später hochgeladene Bilder analysieren, Objekte erkennen,
+      Inhalte beschreiben und dir intelligente Vorschläge liefern.  
+      Sobald das Backend aktiv ist, kannst du Bilder verarbeiten lassen, ohne selbst etwas tun zu müssen.
+    </div>
+
+  </div>
+
+  <script>
+    function sendImage() {
+      alert("Das Backend ist noch nicht aktiv. Die Anfrage wird später automatisch funktionieren.");
+    }
+  </script>
+
+</body>
+</html>

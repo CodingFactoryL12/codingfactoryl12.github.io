@@ -217,31 +217,11 @@ footer {
     die Technik und Design verbinden.
 </div>
 
-<section style="margin-top: 60px; text-align: center;">
-    <h2 style="font-size: 2rem; margin-bottom: 20px;">Neuestes Projekt</h2>
-
-    <div style="width: 90%; max-width: 900px; margin: auto; cursor: pointer;"
-         onclick="window.location.href='projekt-register.html'">
-
-        <div style="position: relative; border-radius: 15px; overflow: hidden; background: #111;">
-            <img src="/New/assets/is-a-dev_register_1200x630.jpg" 
-                 style="width: 100%; display: block; filter: brightness(0.85);">
-
-            <div style="position: absolute; top: 12px; left: 12px; 
-                        background: rgba(0,0,0,0.6); padding: 6px 12px; 
-                        border-radius: 8px; color: #00eaff;">
-                Januar 2026
-            </div>
-
-            <div style="position: absolute; top: 12px; right: 12px; 
-                        background: rgba(0,0,0,0.6); padding: 6px 12px; 
-                        border-radius: 8px; font-weight: bold;">
-                is-a.dev Register
-            </div>
-        </div>
-    </div>
-</section>
-
+<!-- NEUSTES PROJEKT -->
+<div class="latest-project">
+    <h2>Neuestes Projekt</h2>
+    <div id="latestProjectContainer"></div>
+</div>
 
 <script>
 /* APPLE INTRO SCROLL */
@@ -255,7 +235,21 @@ function revealIntro() {
 window.addEventListener("scroll", revealIntro);
 revealIntro();
 
-
+/* AUTOMATISCH NEUESTES PROJEKT */
+const projects = [
+    {
+        title: "Projekt 1",
+        date: "2024-01-01",
+        img: "https://picsum.photos/600/350?random=10",
+        link: "projekt1.html"
+    },
+    {
+        title: "Projekt 2",
+        date: "2023-01-01",
+        img: "https://picsum.photos/600/350?random=11",
+        link: "projekt2.html"
+    }
+];
 
 // Sortieren nach Datum (neu → alt)
 projects.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -270,79 +264,6 @@ document.getElementById("latestProjectContainer").innerHTML = `
     </div>
 `;
 </script>
-
-<!-- SOCIAL MEDIA SECTION -->
-<section style="margin-top: 80px; text-align: center;">
-    <h2 style="font-size: 2rem; margin-bottom: 20px;">Folge mir auf Social Media</h2>
-
-    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-
-        <!-- GitHub -->
-        <a href="https://github.com/CodingFactoryL12" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #00eaff; text-decoration: none; font-weight: bold;">
-            GitHub
-        </a>
-
-        <!-- YouTube -->
-        <a href="https://www.youtube.com/@CodingFactoryL" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #ff4d4d; text-decoration: none; font-weight: bold;">
-            YouTube
-        </a>
-
-        <!-- Instagram -->
-        <a href="https://instagram.com/CodingL_YT" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #ff66cc; text-decoration: none; font-weight: bold;">
-            Instagram
-        </a>
-
-        <!-- Discord -->
-        <a href="https://discord.gg/CodingFactoryL" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #7289da; text-decoration: none; font-weight: bold;">
-            Discord
-        </a>
-
-        <!-- E-Mail -->
-        <a href="mailto:leon.f662011@gmail.com"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #00ff99; text-decoration: none; font-weight: bold;">
-            E‑Mail
-        </a>
-
-        <!-- gutefrage -->
-        <a href="https://www.gutefrage.net/nutzer/MarkusGemke" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #00c8ff; text-decoration: none; font-weight: bold;">
-            gutefrage
-        </a>
-
-        <!-- Reddit -->
-        <a href="https://reddit.com/user/Ok_Number_1895" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #ff4500; text-decoration: none; font-weight: bold;">
-            Reddit
-        </a>
-
-        <!-- Xbox -->
-        <a href="https://account.xbox.com/de-de/Profile?Gamertag=CodingL_YT" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #44d62c; text-decoration: none; font-weight: bold;">
-            Xbox
-        </a>
-
-        <!-- Epic Games -->
-        <a href="https://store.epicgames.com/u/CodingFactoryL_Y" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #ffffff; text-decoration: none; font-weight: bold;">
-            Epic Games
-        </a>
-
-    </div>
-</section>
-
 
 <footer>
     © 2025 CodingFactoryL – Alle Rechte vorbehalten

@@ -24,13 +24,8 @@ body {
     box-shadow: 0 0 20px rgba(0, 234, 255, 0.2);
 }
 
-/* Einheitliche Breite für Inputs und Buttons */
-input, .login-btn {
-    width: 100%;
-    box-sizing: border-box;
-}
-
 input {
+    width: 100%;
     padding: 14px;
     margin-bottom: 20px;
     border-radius: 10px;
@@ -46,6 +41,7 @@ input:focus {
 }
 
 .login-btn {
+    width: 100%;
     padding: 14px;
     background: #00eaff;
     border: none;
@@ -54,16 +50,6 @@ input:focus {
     font-weight: bold;
     cursor: pointer;
     color: #000;
-    margin-bottom: 10px;
-}
-
-.login-btn:hover {
-    background: #00bcd4;
-}
-
-a {
-    color: #00eaff;
-    text-decoration: none;
 }
 </style>
 </head>
@@ -77,8 +63,6 @@ a {
     <input id="password" type="password" placeholder="Passwort" required>
 
     <button class="login-btn" onclick="login()">Einloggen</button>
-
-    <p>Noch keinen Account? <a href="register.html">Registrieren</a></p>
 </div>
 
 <script>
@@ -86,15 +70,13 @@ function login() {
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
 
-    const users = JSON.parse(localStorage.getItem("users")) || {};
-
-    if (!users[user] || users[user].password !== pass) {
+    // Platzhalter-Login (später DB)
+    if (user === "admin" && pass === "1234") {
+        localStorage.setItem("loggedInUser", user);
+        window.location.href = "dashboard.html";
+    } else {
         alert("Falsche Login-Daten");
-        return;
     }
-
-    localStorage.setItem("loggedInUser", user);
-    window.location.href = "dashboard.html";
 }
 </script>
 

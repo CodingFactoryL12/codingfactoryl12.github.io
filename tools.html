@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Tools</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .tool-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .btn {
+      background: #2563eb;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+
+    textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    #qrCanvas {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Tools</h1>
+
+  <!-- PASSWORD GENERATOR -->
+  <div class="tool-card">
+    <h2>🔐 Passwort‑Generator</h2>
+
+    <label>Länge</label>
+    <input type="number" id="pwLength" value="12" min="4" max="50">
+
+    <label><input type="checkbox" id="pwUpper" checked> Großbuchstaben</label><br>
+    <label><input type="checkbox" id="pwLower" checked> Kleinbuchstaben</label><br>
+    <label><input type="checkbox" id="pwNumbers" checked> Zahlen</label><br>
+    <label><input type="checkbox" id="pwSymbols"> Symbole</label><br>
+
+    <button class="btn" onclick="generatePassword()">Passwort generieren</button>
+
+    <input type="text" id="pwOutput" readonly>
+  </div>
+
+  <!-- TEXT TOOLS -->
+  <div class="tool-card">
+    <h2>✏️ Text‑Tools</h2>
+
+    <textarea id="textInput" placeholder="Text hier eingeben..."></textarea>
+
+    <button class="btn" onclick="toUpper()">GROSSSCHREIBUNG</button>
+    <button class="btn" onclick="toLower()">kleinschreibung</button>
+    <button class="btn" onclick="countWords()">Wörter zählen</button>
+    <button class="btn" onclick="removeDuplicates()">Duplikate entfernen</button>
+
+    <textarea id="textOutput" placeholder="Ergebnis..." readonly></textarea>
+  </div>
+
+  <!-- QR CODE GENERATOR -->
+  <div class="tool-card">
+    <h2>📱 QR‑Code Generator</h2>
+
+    <input type="text" id="qrText" placeholder="Text oder URL eingeben...">
+    <button class="btn" onclick="generateQR()">QR‑Code erzeugen</button>
+
+    <canvas id="qrCanvas"></canvas>
+  </div>
+
+  <!-- JSON FORMATTER -->
+  <div class="tool-card">
+    <h2>🧩 JSON‑Formatter</h2>
+
+    <textarea id="jsonInput" placeholder="JSON hier einfügen..."></textarea>
+    <button class="btn" onclick="formatJSON()">Formatieren</button>
+
+    <textarea id="jsonOutput" placeholder="Formatiertes JSON..." readonly></textarea>
+  </div>
+
+  <script>
+    /* ---------------- PASSWORD GENERATOR ---------------- */
+    function generatePassword() {
+      const length = document.getElementById("pwLength").value;
+      let chars = "";
+      if (document.getElementById("pwUpper").checked) chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      if (document.getElementById("pwLower").checked) chars += "abcdefghijklmnopqrstuvwxyz";
+      if (document.getElementById("pwNumbers").checked) chars += "0123456789";
+      if (document.getElementById("pwSymbols").checked) chars += "!@#$%^&*()_+-=[]{}";
+
+      let pw = "";
+      for (let i = 0; i < length; i++) {
+        pw += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      document.getElementById("pwOutput").value = pw;
+    }
+
+    /* ---------------- TEXT TOOLS ---------------- */
+    function toUpper() {
+      document.getElementById("textOutput").value =
+        document.getElementById("textInput").value.toUpperCase();
+    }
+
+    function toLower() {
+      document.getElementById("textOutput").value =
+        document.getElementById("textInput").value.toLowerCase();
+    }
+
+    function countWords() {
+      const text = document.getElementById("textInput").value.trim();
+      const count = text ? text.split(/\s+/).length : 0;
+      document.getElementById("textOutput").value = "Wörter: " + count;
+    }
+
+    function removeDuplicates() {
+      const lines = document.getElementById("textInput").value.split("\n");
+      const unique = [...new Set(lines)];
+      document.getElementById("textOutput").value = unique.join("\n");
+    }
+
+    /* ---------------- QR CODE GENERATOR ---------------- */
+    function generateQR() {
+      const text = document.getElementById("qrText").value;
+      const canvas = document.getElementById("qrCanvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = 200;
+      canvas.height = 200;
+
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, 200, 200);
+
+      // Simple fake QR pattern (echtes QR kommt später)
+      ctx.fillStyle = "#000";
+      for (let i = 0; i < 200; i += 20) {
+        for (let j = 0; j < 200; j += 20) {
+          if (Math.random() > 0.5) ctx.fillRect(i, j, 20, 20);
+        }
+      }
+    }
+
+    /* ---------------- JSON FORMATTER ---------------- */
+    function formatJSON() {
+      try {
+        const obj = JSON.parse(document.getElementById("jsonInput").value);
+        document.getElementById("jsonOutput").value = JSON.stringify(obj, null, 2);
+      } catch (e) {
+        document.getElementById("jsonOutput").value = "❌ Fehler: Ungültiges JSON";
+      }
+    }
+  </script>
+
+</body>
+</html>

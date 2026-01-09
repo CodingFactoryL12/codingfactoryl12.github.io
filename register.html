@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Login – CodingFactoryL</title>
+<title>Registrieren – CodingFactoryL</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -24,13 +24,8 @@ body {
     box-shadow: 0 0 20px rgba(0, 234, 255, 0.2);
 }
 
-/* Einheitliche Breite für Inputs und Buttons */
-input, .login-btn {
-    width: 100%;
-    box-sizing: border-box;
-}
-
 input {
+    width: 100%;
     padding: 14px;
     margin-bottom: 20px;
     border-radius: 10px;
@@ -46,6 +41,7 @@ input:focus {
 }
 
 .login-btn {
+    width: 100%;
     padding: 14px;
     background: #00eaff;
     border: none;
@@ -54,11 +50,6 @@ input:focus {
     font-weight: bold;
     cursor: pointer;
     color: #000;
-    margin-bottom: 10px;
-}
-
-.login-btn:hover {
-    background: #00bcd4;
 }
 
 a {
@@ -71,30 +62,47 @@ a {
 <body>
 
 <div class="login-box">
-    <h1>Login</h1>
+    <h1>Registrieren</h1>
 
     <input id="username" type="text" placeholder="Benutzername" required>
     <input id="password" type="password" placeholder="Passwort" required>
 
-    <button class="login-btn" onclick="login()">Einloggen</button>
+    <button class="login-btn" onclick="registerUser()">Account erstellen</button>
 
-    <p>Noch keinen Account? <a href="register.html">Registrieren</a></p>
+    <p style="margin-top:20px;">Schon einen Account? <a href="login.html">Login</a></p>
+
+    <p id="error" style="color:red; margin-top:10px;"></p>
 </div>
 
 <script>
-function login() {
-    const user = document.getElementById("username").value;
-    const pass = document.getElementById("password").value;
+function registerUser() {
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
 
-    const users = JSON.parse(localStorage.getItem("users")) || {};
-
-    if (!users[user] || users[user].password !== pass) {
-        alert("Falsche Login-Daten");
+    if (!user || !pass) {
+        document.getElementById("error").innerText = "Bitte alle Felder ausfüllen.";
         return;
     }
 
-    localStorage.setItem("loggedInUser", user);
-    window.location.href = "dashboard.html";
+    // Nutzerliste aus localStorage laden
+    const users = JSON.parse(localStorage.getItem("users")) || {};
+
+    // Prüfen ob Nutzer existiert
+    if (users[user]) {
+        document.getElementById("error").innerText = "Benutzer existiert bereits!";
+        return;
+    }
+
+    // Nutzer speichern (wie Backend-DB)
+    users[user] = {
+        password: pass,
+        createdAt: Date.now()
+    };
+
+    localStorage.setItem("users", JSON.stringify(users));
+
+    // Weiterleitung wie echtes Backend
+    window.location.href = "login.html";
 }
 </script>
 
