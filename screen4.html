@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netzwerk</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #101530 0, #05060a 45%, #000 100%);
+      color: #e9f5ff;
+      font-family: "Inter", sans-serif;
+    }
+
+    .wrapper {
+      padding: 2vh 3vw;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5vh;
+    }
+
+    .tile {
+      padding: 1.5vh 1vw;
+      border-radius: 14px;
+      background: rgba(10, 20, 40, 0.7);
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      box-shadow: 0 0 12px rgba(0, 120, 255, 0.3);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .name {
+      font-size: 3.8vw;
+      font-weight: 600;
+      margin-bottom: 0.5vh;
+    }
+
+    .status {
+      font-size: 3.2vw;
+      opacity: 0.8;
+      margin-bottom: 0.8vh;
+    }
+
+    .btn {
+      padding: 0.4rem 0.8rem;
+      border-radius: 10px;
+      border: 1px solid rgba(0,200,255,0.4);
+      background: rgba(0,200,255,0.15);
+      color: #e9f5ff;
+      font-size: 3vw;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+    }
+  </style>
+</head>
+<script>
+const pages = [
+  "dashboardlocal.html",
+  "screen2.html",
+  "screen3.html",
+  "screen4.html",
+  "screen5.html"
+];
+
+function autoSwitch() {
+  const current = window.location.pathname.split("/").pop();
+  const index = pages.indexOf(current);
+  const next = (index + 1) % pages.length;
+  window.location.href = pages[next];
+}
+
+// alle 2 Minuten (120.000 ms)
+setTimeout(autoSwitch, 120000);
+</script>
+
+<body>
+<div class="wrapper">
+
+  <div class="grid">
+
+    <!-- Router -->
+    <div class="tile">
+      <div class="name">Speedport 3</div>
+      <div class="status" id="routerStatus">Lade...</div>
+      <div class="status" id="wanStatus">WAN: ...</div>
+      <div class="btn" id="pingBtn">Ping</div>
+    </div>
+
+    <!-- Internet -->
+    <div class="tile">
+      <div class="name">Internet</div>
+      <div class="status" id="internetStatus">Lade...</div>
+      <div class="status" id="pingValue">Ping: ...</div>
+      <div class="btn" id="speedBtn">Speedtest</div>
+    </div>
+
+    <!-- WLAN -->
+    <div class="tile">
+      <div class="name">WLAN</div>
+      <div class="status">2.4GHz: Aktiv</div>
+      <div class="status">5GHz: Aktiv</div>
+    </div>
+
+    <!-- Clients -->
+    <div class="tile">
+      <div class="name">Clients</div>
+      <div class="status" id="clientCount">Lade...</div>
+      <div class="status" id="clientActive">...</div>
+    </div>
+
+    <!-- LAN -->
+    <div class="tile">
+      <div class="name">LAN Ports</div>
+      <div class="status">1: Aktiv</div>
+      <div class="status">2: Aktiv</div>
+    </div>
+
+    <!-- DNS -->
+    <div class="tile">
+      <div class="name">DNS</div>
+      <div class="status">Cloudflare</div>
+      <div class="status">1.1.1.1</div>
+    </div>
+
+    <!-- Firewall -->
+    <div class="tile">
+      <div class="name">Firewall</div>
+      <div class="status">Aktiv</div>
+      <div class="btn">Logs</div>
+    </div>
+
+    <!-- Netzwerk Health -->
+    <div class="tile">
+      <div class="name">Health</div>
+      <div class="status" id="healthStatus">Lade...</div>
+      <div class="status" id="healthWarn">...</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const API = "http://192.168.2.219:9200/api";  // <--- HIER DEINE IP EINTRAGEN
+
+async function updatePing() {
+  try {
+    const res = await fetch(API + "/ping");
+    const data = await res.json();
+    document.getElementById("pingValue").textContent =
+      data.ok ? "Ping: " + data.ms.toFixed(0) + " ms" : "Ping: Fehler";
+  } catch {
+    document.getElementById("pingValue").textContent = "Ping: offline";
+  }
+}
+
+async function updateRouter() {
+  try {
+    const res = await fetch(API + "/router");
+    const data = await res.json();
+
+    document.getElementById("routerStatus").textContent =
+      data.online ? "Online" : "Offline";
+
+    document.getElementById("wanStatus").textContent =
+      "WAN: " + data.wan;
+
+    document.getElementById("clientCount").textContent =
+      data.clients + " Geräte";
+
+    document.getElementById("clientActive").textContent =
+      data.active + " aktiv";
+
+    document.getElementById("internetStatus").textContent =
+      data.online ? "Verbunden" : "Getrennt";
+
+  } catch {
+    document.getElementById("routerStatus").textContent = "Offline";
+    document.getElementById("internetStatus").textContent = "Offline";
+  }
+}
+
+async function updateHealth() {
+  try {
+    const res = await fetch(API + "/health");
+    const data = await res.json();
+
+    document.getElementById("healthStatus").textContent =
+      data.ok ? "OK" : "Warnungen";
+
+    document.getElementById("healthWarn").textContent =
+      data.warnings + " Warnungen";
+
+  } catch {
+    document.getElementById("healthStatus").textContent = "Offline";
+  }
+}
+
+async function runSpeedtest() {
+  const btn = document.getElementById("speedBtn");
+  btn.textContent = "Läuft...";
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(API + "/speedtest");
+    const data = await res.json();
+
+    document.getElementById("internetStatus").textContent =
+      data.down + "↓ / " + data.up + "↑";
+
+  } catch {
+    document.getElementById("internetStatus").textContent = "Fehler";
+  }
+
+  btn.textContent = "Speedtest";
+  btn.disabled = false;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  updatePing();
+  updateRouter();
+  updateHealth();
+
+  setInterval(updatePing, 10000);
+  setInterval(updateRouter, 15000);
+  setInterval(updateHealth, 20000);
+
+  document.getElementById("speedBtn").addEventListener("click", runSpeedtest);
+  document.getElementById("pingBtn").addEventListener("click", updatePing);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalender</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #101530 0, #05060a 45%, #000 100%);
+      color: #f5f5f7;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    }
+
+    .calendar-wrapper {
+      max-width: 900px;
+      margin: 4vh auto;
+      padding: 2vh 3vw;
+      border-radius: 18px;
+      background: rgba(15, 18, 30, 0.9);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 0 30px rgba(0,0,0,0.6);
+    }
+
+    .cal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2vh;
+    }
+
+    .cal-title {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+
+    .cal-nav button {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      color: #f5f5f7;
+      padding: 0.4rem 0.9rem;
+      margin-left: 0.4rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .cal-nav button:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.4rem;
+    }
+
+    .cal-weekday {
+      text-align: center;
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-bottom: 0.3rem;
+    }
+
+    .cal-day {
+      height: 70px;
+      border-radius: 10px;
+      padding: 0.3rem 0.4rem;
+      font-size: 0.9rem;
+      position: relative;
+      cursor: default;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .cal-day.today {
+      border: 1px solid #ff453a;
+      box-shadow: 0 0 12px rgba(255,69,58,0.6);
+    }
+
+    .cal-day .date {
+      font-weight: 500;
+    }
+
+    .cal-day .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #0a84ff;
+      position: absolute;
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .event-list {
+      margin-top: 2vh;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 1.5vh;
+    }
+
+    .event-item {
+      padding: 0.6rem 0.4rem;
+      border-radius: 10px;
+      margin-bottom: 0.4rem;
+      background: rgba(255,255,255,0.03);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .event-time {
+      opacity: 0.8;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<script>
+const pages = [
+  "dashboardlocal.html",
+  "screen2.html",
+  "screen3.html",
+  "screen4.html",
+  "screen5.html"
+];
+
+function autoSwitch() {
+  const current = window.location.pathname.split("/").pop();
+  const index = pages.indexOf(current);
+  const next = (index + 1) % pages.length;
+  window.location.href = pages[next];
+}
+
+// alle 2 Minuten (120.000 ms)
+setTimeout(autoSwitch, 120000);
+</script>
+<body>
+<div class="calendar-wrapper">
+  <div class="cal-header">
+    <div class="cal-title" id="cal-title">Kalender</div>
+    <div class="cal-nav">
+      <button id="prev-month">‹</button>
+      <button id="today-btn">Heute</button>
+      <button id="next-month">›</button>
+    </div>
+  </div>
+
+  <div class="cal-grid" id="cal-grid">
+    <!-- Wochentage -->
+  </div>
+
+  <div class="event-list" id="event-list">
+    <!-- Events für ausgewählten Tag -->
+  </div>
+</div>
+
+<script>
+const weekdays = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+const monthNames = [
+  "Januar","Februar","März","April","Mai","Juni",
+  "Juli","August","September","Oktober","November","Dezember"
+];
+
+// Demo-Events (später: Apple / iCloud / CalDAV / ICS)
+const demoEvents = {
+  // "YYYY-MM-DD": [...]
+  "2026-01-13": [
+    { title: "Backup PVE1 prüfen", time: "09:00" },
+    { title: "Docker Updates", time: "19:30" }
+  ],
+  "2026-01-14": [
+    { title: "HA Automationen testen", time: "20:00" }
+  ]
+};
+
+let current = new Date();
+let selectedDate = null;
+
+const grid = document.getElementById("cal-grid");
+const titleEl = document.getElementById("cal-title");
+const eventList = document.getElementById("event-list");
+
+function renderCalendar() {
+  grid.innerHTML = "";
+  // Wochentage
+  weekdays.forEach(d => {
+    const el = document.createElement("div");
+    el.className = "cal-weekday";
+    el.textContent = d;
+    grid.appendChild(el);
+  });
+
+  const year = current.getFullYear();
+  const month = current.getMonth();
+  titleEl.textContent = `${monthNames[month]} ${year}`;
+
+  const firstDay = new Date(year, month, 1);
+  const startOffset = (firstDay.getDay() + 6) % 7; // Mo=0
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0,10);
+
+  // Leere Felder vor dem 1.
+  for (let i = 0; i < startOffset; i++) {
+    const empty = document.createElement("div");
+    grid.appendChild(empty);
+  }
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(year, month, day);
+    const dateStr = date.toISOString().slice(0,10);
+
+    const cell = document.createElement("div");
+    cell.className = "cal-day";
+    if (dateStr === todayStr) cell.classList.add("today");
+
+    const span = document.createElement("div");
+    span.className = "date";
+    span.textContent = day;
+    cell.appendChild(span);
+
+    if (demoEvents[dateStr]) {
+      const dot = document.createElement("div");
+      dot.className = "dot";
+      cell.appendChild(dot);
+    }
+
+    cell.addEventListener("click", () => {
+      selectedDate = dateStr;
+      renderEvents();
+    });
+
+    grid.appendChild(cell);
+  }
+}
+
+function renderEvents() {
+  eventList.innerHTML = "";
+  if (!selectedDate) return;
+
+  const events = demoEvents[selectedDate] || [];
+  if (!events.length) {
+    eventList.innerHTML = `<div style="opacity:0.7;font-size:0.9rem;">Keine Termine</div>`;
+    return;
+  }
+
+  events.forEach(ev => {
+    const row = document.createElement("div");
+    row.className = "event-item";
+
+    const title = document.createElement("div");
+    title.textContent = ev.title;
+
+    const time = document.createElement("div");
+    time.className = "event-time";
+    time.textContent = ev.time;
+
+    row.appendChild(title);
+    row.appendChild(time);
+    eventList.appendChild(row);
+  });
+}
+
+document.getElementById("prev-month").onclick = () => {
+  current.setMonth(current.getMonth() - 1);
+  renderCalendar();
+  eventList.innerHTML = "";
+};
+
+document.getElementById("next-month").onclick = () => {
+  current.setMonth(current.getMonth() + 1);
+  renderCalendar();
+  eventList.innerHTML = "";
+};
+
+document.getElementById("today-btn").onclick = () => {
+  current = new Date();
+  renderCalendar();
+  selectedDate = new Date().toISOString().slice(0,10);
+  renderEvents();
+};
+
+renderCalendar();
+selectedDate = new Date().toISOString().slice(0,10);
+renderEvents();
+</script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #101530 0, #05060a 45%, #000 100%);
+      color: #e9f5ff;
+      font-family: "Inter", sans-serif;
+      overflow-y: scroll;
+    }
+
+    #screen2 {
+      width: 100vw;
+      padding: 3vh 4vw;
+    }
+
+    .server-block {
+      margin-bottom: 4vh;
+      padding: 2vh 3vw;
+      border-radius: 16px;
+      background: rgba(10, 20, 40, 0.7);
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      box-shadow: 0 0 18px rgba(0, 120, 255, 0.3);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .server-title {
+      font-size: 6vw;
+      margin-bottom: 2vh;
+      text-shadow: 0 0 12px rgba(0,200,255,0.6);
+    }
+
+    .gauges {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .gauge {
+      width: 40vw;
+      text-align: center;
+    }
+
+    .gauge-label {
+      margin-top: 1vh;
+      font-size: 4vw;
+      opacity: 0.8;
+    }
+
+    .storage-block {
+      margin-top: 3vh;
+    }
+
+    .storage-title {
+      font-size: 4vw;
+      margin-bottom: 1vh;
+      opacity: 0.8;
+    }
+
+    .storage-bar {
+      width: 100%;
+      height: 3vh;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .storage-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00c8ff, #0066ff);
+      box-shadow: 0 0 12px rgba(0,200,255,0.6);
+      transition: width 0.6s ease;
+    }
+
+    .net-block {
+      margin-top: 3vh;
+    }
+  </style>
+</head>
+<script>
+const pages = [
+  "dashboardlocal.html",
+  "screen2.html",
+  "screen3.html",
+  "screen4.html",
+  "screen5.html"
+];
+
+function autoSwitch() {
+  const current = window.location.pathname.split("/").pop();
+  const index = pages.indexOf(current);
+  const next = (index + 1) % pages.length;
+  window.location.href = pages[next];
+}
+
+// alle 2 Minuten (120.000 ms)
+setTimeout(autoSwitch, 120000);
+</script>
+<body>
+<div id="screen2">
+
+  <!-- PROXMOX 1 -->
+  <div class="server-block">
+    <div class="server-title">Proxmox 1</div>
+    <div class="gauges">
+      <div class="gauge">
+        <canvas id="pve1_cpu"></canvas>
+        <div class="gauge-label">CPU</div>
+      </div>
+      <div class="gauge">
+        <canvas id="pve1_ram"></canvas>
+        <div class="gauge-label">RAM</div>
+      </div>
+    </div>
+    <div class="storage-block">
+      <div class="storage-title">Storage</div>
+      <div class="storage-bar"><div id="pve1_storage" class="storage-bar-fill"></div></div>
+    </div>
+    <div class="net-block">
+      <canvas id="pve1_net"></canvas>
+    </div>
+  </div>
+
+  <!-- PROXMOX 2 -->
+  <div class="server-block">
+    <div class="server-title">Proxmox 2</div>
+    <div class="gauges">
+      <div class="gauge">
+        <canvas id="pve2_cpu"></canvas>
+        <div class="gauge-label">CPU</div>
+      </div>
+      <div class="gauge">
+        <canvas id="pve2_ram"></canvas>
+        <div class="gauge-label">RAM</div>
+      </div>
+    </div>
+    <div class="storage-block">
+      <div class="storage-title">Storage</div>
+      <div class="storage-bar"><div id="pve2_storage" class="storage-bar-fill"></div></div>
+    </div>
+    <div class="net-block">
+      <canvas id="pve2_net"></canvas>
+    </div>
+  </div>
+
+  <!-- HOME ASSISTANT -->
+  <div class="server-block">
+    <div class="server-title">Home Assistant</div>
+    <div class="gauges">
+      <div class="gauge">
+        <canvas id="ha_cpu"></canvas>
+        <div class="gauge-label">CPU</div>
+      </div>
+      <div class="gauge">
+        <canvas id="ha_ram"></canvas>
+        <div class="gauge-label">RAM</div>
+      </div>
+    </div>
+    <div class="storage-block">
+      <div class="storage-title">Storage</div>
+      <div class="storage-bar"><div id="ha_storage" class="storage-bar-fill"></div></div>
+    </div>
+    <div class="net-block">
+      <canvas id="ha_net"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const PVE1 = "http://192.168.2.152:9000";
+const PVE2 = "http://192.168.2.219:9000";
+// Wenn HA noch nicht läuft, erstmal auf null setzen:
+const HA   = null; // "http://192.168.2.100:9000";
+
+async function load(url) {
+  const res = await fetch(url);
+  return await res.json();
+}
+
+function drawGauge(canvas, value, color) {
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width = 300;
+  const h = canvas.height = 150;
+
+  ctx.clearRect(0, 0, w, h);
+
+  ctx.lineWidth = 18;
+  ctx.strokeStyle = "rgba(255,255,255,0.1)";
+  ctx.beginPath();
+  ctx.arc(w/2, h, 100, Math.PI, 0);
+  ctx.stroke();
+
+  ctx.strokeStyle = color;
+  ctx.beginPath();
+  ctx.arc(w/2, h, 100, Math.PI, Math.PI * value);
+  ctx.stroke();
+}
+
+function updateStorage(id, used, total) {
+  const bar = document.getElementById(id);
+  if (!bar || !total) return;
+  bar.style.width = (used / total * 100) + "%";
+}
+
+function drawNet(canvas, history) {
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width = 300;
+  const h = canvas.height = 120;
+
+  ctx.clearRect(0, 0, w, h);
+
+  if (!history.length) return;
+
+  ctx.strokeStyle = "#00c8ff";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+
+  history.forEach((v, i) => {
+    const x = (i / (history.length - 1)) * w;
+    const y = h - (v / 100 * h);
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+
+  ctx.stroke();
+}
+
+let hist = { pve1: [], pve2: [], ha: [] };
+
+async function update() {
+  try {
+    const pve1 = await load(PVE1);
+    const pve2 = await load(PVE2);
+
+drawGauge(pve1_cpu, pve1.cpu, "#00c8ff");
+    drawGauge(pve1_ram, pve1.ram_used / pve1.ram_total, "#ff9900");
+    updateStorage("pve1_storage", pve1.disk_used, pve1.disk_total);
+
+    drawGauge(pve2_cpu, pve2.cpu, "#00c8ff");
+    drawGauge(pve2_ram, pve2.ram_used / pve2.ram_total, "#ff9900");
+    updateStorage("pve2_storage", pve2.disk_used, pve2.disk_total);
+
+    // HA nur, wenn URL gesetzt und erreichbar
+    if (HA) {
+      const ha = await load(HA);
+      drawGauge(ha_cpu, ha.cpu/100, "#00c8ff");
+      drawGauge(ha_ram, ha.ram_used/ha.ram_total, "#ff9900");
+      updateStorage("ha_storage", ha.disk_used, ha.disk_total);
+      hist.ha.push(ha.net_in);
+      if (hist.ha.length > 20) hist.ha.shift();
+      drawNet(ha_net, hist.ha);
+    }
+
+    hist.pve1.push(pve1.net_in);
+    hist.pve2.push(pve2.net_in);
+
+    if (hist.pve1.length > 20) {
+      hist.pve1.shift();
+      hist.pve2.shift();
+    }
+
+    drawNet(pve1_net, hist.pve1);
+    drawNet(pve2_net, hist.pve2);
+
+  } catch (e) {
+    console.error("Update error:", e);
+  }
+}
+
+setInterval(update, 3000);
+update();
+</script>

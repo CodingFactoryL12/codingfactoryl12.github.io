@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Home</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #101530 0, #05060a 45%, #000 100%);
+      color: #e9f5ff;
+      font-family: "Inter", sans-serif;
+    }
+
+    .wrapper {
+      padding: 2vh 3vw;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5vh;
+    }
+
+    .tile {
+      padding: 1.5vh 1vw;
+      border-radius: 14px;
+      background: rgba(10, 20, 40, 0.7);
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      box-shadow: 0 0 12px rgba(0, 120, 255, 0.3);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .name {
+      font-size: 3.8vw;
+      font-weight: 600;
+      margin-bottom: 0.5vh;
+    }
+
+    .status {
+      font-size: 3.2vw;
+      opacity: 0.8;
+      margin-bottom: 0.8vh;
+    }
+
+    .btn {
+      padding: 0.4rem 0.8rem;
+      border-radius: 10px;
+      border: 1px solid rgba(0,200,255,0.4);
+      background: rgba(0,200,255,0.15);
+      color: #e9f5ff;
+      font-size: 3vw;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+    }
+
+    .btn.off {
+      background: rgba(255,80,80,0.2);
+      border-color: rgba(255,80,80,0.4);
+    }
+  </style>
+</head>
+<script>
+const pages = [
+  "dashboardlocal.html",
+  "screen2.html",
+  "screen3.html",
+  "screen4.html",
+  "screen5.html"
+];
+
+function autoSwitch() {
+  const current = window.location.pathname.split("/").pop();
+  const index = pages.indexOf(current);
+  const next = (index + 1) % pages.length;
+  window.location.href = pages[next];
+}
+
+// alle 2 Minuten (120.000 ms)
+setTimeout(autoSwitch, 120000);
+</script>
+<body>
+<div class="wrapper">
+
+  <div class="grid">
+
+    <!-- TAPO P100 -->
+    <div class="tile">
+      <div class="name">P100</div>
+      <div class="status">Aus</div>
+      <div class="btn">Ein</div>
+    </div>
+
+    <!-- TAPO C200 -->
+    <div class="tile">
+      <div class="name">C200</div>
+      <div class="status">Online</div>
+      <div class="btn">Privacy</div>
+    </div>
+
+    <!-- Türsensor -->
+    <div class="tile">
+      <div class="name">Türsensor</div>
+      <div class="status">Geschlossen</div>
+      <div class="status">92% Akku</div>
+    </div>
+
+    <!-- Tapo Hub -->
+    <div class="tile">
+      <div class="name">Tapo Hub</div>
+      <div class="status">Online</div>
+      <div class="btn">Ping</div>
+    </div>
+
+    <!-- Lefant -->
+    <div class="tile">
+      <div class="name">Lefant M210P</div>
+      <div class="status">Idle</div>
+      <div class="status">78% Akku</div>
+    </div>
+
+    <!-- Lidl Lampe -->
+    <div class="tile">
+      <div class="name">Lampe</div>
+      <div class="status">An · 60%</div>
+      <div class="btn off">Aus</div>
+    </div>
+
+    <!-- Ambient -->
+    <div class="tile">
+      <div class="name">Ambient</div>
+      <div class="status">RGB Blau</div>
+      <div class="btn">Farbe</div>
+    </div>
+
+    <!-- LED Strip -->
+    <div class="tile">
+      <div class="name">LED Strip</div>
+      <div class="status">Rainbow</div>
+      <div class="btn">Effekt</div>
+    </div>
+
+    <!-- Lidl Hub -->
+    <div class="tile">
+      <div class="name">Lidl Hub</div>
+      <div class="status">Online</div>
+      <div class="btn">Info</div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

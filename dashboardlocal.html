@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dashboard – Futuristic</title>
+
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    background: radial-gradient(circle at top, #101530 0, #05060a 45%, #000 100%);
+    color: #f5f7ff;
+    font-family: "Inter", sans-serif;
+    overflow: hidden;
+  }
+
+  #screen1 {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 3vh;
+  }
+
+  /* Uhr */
+  #clock {
+    font-size: 12vw;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 18px rgba(0, 200, 255, 0.6);
+  }
+
+  /* Datum */
+  #date {
+    margin-top: 0.5vh;
+    font-size: 4vw;
+    opacity: 0.8;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #a9b3ff;
+  }
+
+  /* Wetterblock kompakt */
+  #weather-service {
+    margin-top: 3vh;
+    text-align: center;
+  }
+
+  .weather-small {
+    text-align: center;
+  }
+
+  .icon-small {
+    width: 18vw;
+    height: 18vw;
+    margin: 0 auto 1vh auto;
+    position: relative;
+  }
+
+  .cloud {
+    position: absolute;
+    width: 140%;
+    height: 60%;
+    background: radial-gradient(circle, rgba(255,255,255,0.9) 0, rgba(200,220,255,0) 60%);
+    top: 40%;
+    left: -20%;
+    filter: blur(4px);
+    opacity: 0.9;
+    animation: cloudMove 12s linear infinite;
+  }
+
+  .cloud2 {
+    top: 30%;
+    left: -30%;
+    opacity: 0.6;
+    animation-duration: 18s;
+  }
+
+  @keyframes cloudMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(40%); }
+  }
+
+  .ws-temp-small {
+    font-size: 7vw;
+    font-weight: 300;
+    color: #e9f5ff;
+    text-shadow: 0 0 12px rgba(0,200,255,0.6);
+  }
+
+  .ws-desc-small {
+    font-size: 4vw;
+    opacity: 0.85;
+    color: #9fd4ff;
+  }
+
+  .ws-extra-small {
+    font-size: 3.2vw;
+    opacity: 0.75;
+    color: #7aa0ff;
+    margin-top: 0.5vh;
+  }
+
+  /* Forecast-Leiste */
+  #forecast-bar {
+    margin-top: 3vh;
+    width: 90vw;
+    display: flex;
+    justify-content: space-between;
+    gap: 1vw;
+  }
+
+  .forecast-item {
+    flex: 1;
+    padding: 1vh 1vw;
+    border-radius: 12px;
+    background: rgba(10, 20, 40, 0.7);
+    border: 1px solid rgba(0, 200, 255, 0.25);
+    box-shadow: 0 0 12px rgba(0, 120, 255, 0.25);
+    text-align: center;
+    backdrop-filter: blur(6px);
+  }
+
+  .forecast-time {
+    font-size: 3vw;
+    opacity: 0.8;
+    color: #9fd4ff;
+  }
+
+  .forecast-temp {
+    font-size: 4vw;
+    margin-top: 0.5vh;
+    color: #e9f5ff;
+    text-shadow: 0 0 8px rgba(0,200,255,0.5);
+  }
+
+  .forecast-icon {
+    width: 6vw;
+    height: 6vw;
+    margin: 0.5vh auto 0 auto;
+    position: relative;
+  }
+
+  .forecast-cloud {
+    position: absolute;
+    width: 160%;
+    height: 70%;
+    background: radial-gradient(circle, rgba(255,255,255,0.9) 0, rgba(200,220,255,0) 60%);
+    top: 30%;
+    left: -30%;
+    filter: blur(3px);
+    opacity: 0.9;
+    animation: cloudMove 14s linear infinite;
+  }
+
+  .forecast-cloud.second {
+    opacity: 0.6;
+    animation-duration: 20s;
+  }
+
+  /* Sensor-Karten */
+  #weather-local {
+    margin-top: 3vh;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.8vh;
+    width: 80vw;
+  }
+
+  .sensor-card {
+    padding: 1.6vh 4vw;
+    border-radius: 14px;
+    background: radial-gradient(circle at top left, rgba(0, 200, 255, 0.18), rgba(5, 10, 25, 0.95));
+    border: 1px solid rgba(0, 200, 255, 0.35);
+    box-shadow: 0 0 18px rgba(0, 120, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sensor-label {
+    font-size: 3.2vw;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    opacity: 0.8;
+    color: #9fb4ff;
+  }
+
+  .sensor-value {
+    margin-top: 0.4vh;
+    font-size: 5.4vw;
+    font-weight: 400;
+    color: #e9f5ff;
+  }
+  /* Wetter-Icon Container */
+.icon-small {
+  width: 18vw;
+  height: 18vw;
+  margin: 0 auto 1vh auto;
+  position: relative;
+}
+
+/* Wolken */
+.cloud {
+  position: absolute;
+  width: 140%;
+  height: 60%;
+  background: radial-gradient(circle, rgba(255,255,255,0.9) 0, rgba(200,220,255,0) 60%);
+  top: 40%;
+  left: -20%;
+  filter: blur(4px);
+  opacity: 0.9;
+  animation: cloudMove 12s linear infinite;
+}
+
+.cloud2 {
+  top: 30%;
+  left: -30%;
+  opacity: 0.6;
+  animation-duration: 18s;
+}
+
+@keyframes cloudMove {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(40%); }
+}
+
+/* Regen */
+.rain-drop {
+  position: absolute;
+  width: 2px;
+  height: 10px;
+  background: rgba(120,180,255,0.9);
+  left: 50%;
+  top: 0%;
+  border-radius: 2px;
+  animation: rainFall 0.6s linear infinite;
+}
+
+@keyframes rainFall {
+  0% { transform: translate(-50%, -10%); opacity: 1; }
+  100% { transform: translate(-50%, 120%); opacity: 0; }
+}
+
+/* Schnee */
+.snow {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  left: 50%;
+  top: 0%;
+  opacity: 0.9;
+  animation: snowFall 2.5s linear infinite;
+}
+
+@keyframes snowFall {
+  0% { transform: translate(-50%, -10%) scale(1); }
+  100% { transform: translate(-50%, 120%) scale(0.6); }
+}
+
+/* Sonne */
+.sun {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff7a8 0, #ffcc33 40%, #ff9900 70%, #663300 100%);
+  box-shadow: 0 0 25px rgba(255,200,0,0.8);
+  animation: sunPulse 4s ease-in-out infinite;
+}
+
+@keyframes sunPulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* Nebel */
+.fog {
+  position: absolute;
+  width: 160%;
+  height: 40%;
+  background: rgba(200,200,200,0.25);
+  filter: blur(8px);
+  top: 40%;
+  left: -30%;
+  animation: fogMove 10s linear infinite;
+}
+
+@keyframes fogMove {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(20%); }
+}
+
+</style>
+</head>
+<script>
+const pages = [
+  "dashboardlocal.html",
+  "screen2.html",
+  "screen3.html",
+  "screen4.html",
+  "screen5.html"
+];
+
+function autoSwitch() {
+  const current = window.location.pathname.split("/").pop();
+  const index = pages.indexOf(current);
+  const next = (index + 1) % pages.length;
+  window.location.href = pages[next];
+}
+
+// alle 2 Minuten (120.000 ms)
+setTimeout(autoSwitch, 120000);
+</script>
+<body>
+
+<div id="screen1">
+
+  <div id="clock"></div>
+  <div id="date"></div>
+
+  <!-- Wetter kompakt -->
+ <div id="weather-service">
+  <div class="weather-small">
+    <div id="ws-icon" class="icon-small"></div>
+
+    <div id="ws-temp" class="ws-temp-small">--°C</div>
+    <div id="ws-desc" class="ws-desc-small">Lade Wetter…</div>
+    <div id="ws-wind" class="ws-extra-small"></div>
+    <div id="ws-rain" class="ws-extra-small"></div>
+  </div>
+</div>
+
+<div id="forecast-bar"></div>
+
+
+  <!-- Forecast -->
+  <div id="forecast-bar"></div>
+
+  <!-- Sensorwerte -->
+  <div id="weather-local">
+    <div class="sensor-card">
+      <div class="sensor-label">Temperatur</div>
+      <div class="sensor-value" id="wl-temp">--°C</div>
+    </div>
+    <div class="sensor-card">
+      <div class="sensor-label">Luftfeuchte</div>
+      <div class="sensor-value" id="wl-humidity">--%</div>
+    </div>
+    <div class="sensor-card">
+      <div class="sensor-label">Luftdruck</div>
+      <div class="sensor-value" id="wl-pressure">-- hPa</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Uhr
+  function updateClock() {
+    const now = new Date();
+    document.getElementById("clock").innerText =
+      now.getHours().toString().padStart(2, "0") + ":" +
+      now.getMinutes().toString().padStart(2, "0");
+
+    const options = { weekday: "long", day: "numeric", month: "long" };
+    document.getElementById("date").innerText =
+      now.toLocaleDateString("de-DE", options);
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // Wetter API
+  const KEY = "c2499662435e61bb9d7a7f0e469487c7";
+const LAT = 51.358;
+const LON = 9.479;
+
+function setIcon(condition) {
+  const icon = document.getElementById("ws-icon");
+  icon.innerHTML = "";
+
+  if (condition.includes("rain")) {
+    for (let i = 0; i < 8; i++) {
+      const drop = document.createElement("div");
+      drop.className = "rain-drop";
+      drop.style.left = (20 + Math.random() * 60) + "%";
+      drop.style.animationDelay = (Math.random() * 0.5) + "s";
+      icon.appendChild(drop);
+    }
+  }
+
+  else if (condition.includes("snow")) {
+    for (let i = 0; i < 6; i++) {
+      const flake = document.createElement("div");
+      flake.className = "snow";
+      flake.style.left = (20 + Math.random() * 60) + "%";
+      flake.style.animationDelay = (Math.random() * 1.5) + "s";
+      icon.appendChild(flake);
+    }
+  }
+
+  else if (condition.includes("clear")) {
+    const sun = document.createElement("div");
+    sun.className = "sun";
+    icon.appendChild(sun);
+  }
+
+  else if (condition.includes("fog") || condition.includes("mist")) {
+    const fog = document.createElement("div");
+    fog.className = "fog";
+    icon.appendChild(fog);
+  }
+
+  else {
+    icon.innerHTML = `
+      <div class="cloud"></div>
+      <div class="cloud cloud2"></div>
+    `;
+  }
+}
+
+async function loadWeather() {
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${LAT}&lon=${LON}&appid=${KEY}&units=metric&lang=de`;
+  const res = await fetch(url);
+  const data = await res.json();
+
+  const condition = data.weather[0].main.toLowerCase();
+
+  setIcon(condition);
+
+  document.getElementById("ws-temp").innerText = data.main.temp.toFixed(1) + "°C";
+  document.getElementById("ws-desc").innerText = data.weather[0].description;
+  document.getElementById("ws-wind").innerText = "Wind: " + data.wind.speed + " m/s";
+  document.getElementById("ws-rain").innerText = "Regen: " + (data.rain?.["1h"] ?? 0) + " mm";
+
+  document.getElementById("wl-temp").innerText = data.main.temp.toFixed(1) + "°C";
+  document.getElementById("wl-humidity").innerText = data.main.humidity + "%";
+  document.getElementById("wl-pressure").innerText = data.main.pressure + " hPa";
+}
+
+async function loadForecast() {
+  const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${LAT}&lon=${LON}&appid=${KEY}&units=metric&lang=de`;
+  const res = await fetch(url);
+  const data = await res.json();
+
+  const bar = document.getElementById("forecast-bar");
+  bar.innerHTML = "";
+
+  const next6 = data.list.slice(0, 6);
+
+  next6.forEach(entry => {
+    const time = new Date(entry.dt * 1000).getHours().toString().padStart(2, "0") + ":00";
+    const temp = entry.main.temp.toFixed(1);
+
+    bar.innerHTML += `
+      <div class="forecast-item">
+        <div class="forecast-time">${time}</div>
+        <div class="forecast-icon">
+          <div class="forecast-cloud"></div>
+          <div class="forecast-cloud second"></div>
+        </div>
+        <div class="forecast-temp">${temp}°C</div>
+      </div>
+    `;
+  });
+}
+
+loadWeather();
+loadForecast();
+setInterval(loadWeather, 60000);
+setInterval(loadForecast, 10 * 60 * 1000);
+
+</script>
+
+</body>
+</html>
