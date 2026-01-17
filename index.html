@@ -1,352 +1,310 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>CodingFactoryL</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="assets/icon.jpg">
+	<head>
+		<meta charset="UTF-8" />
+		<title>CodingFactoryL</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/png" href="assets/icon.jpg" />
 
-<style>
+		<style>
+			/* GLOBAL */
+			body {
+				margin: 0;
+				font-family: Arial, sans-serif;
+				background: #0d0d0d;
+				color: white;
+				scroll-behavior: smooth;
+			}
 
-/* GLOBAL */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0d0d0d;
-    color: white;
-    scroll-behavior: smooth;
-}
+			/* HEADER */
+			header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 20px 40px;
+				background: #000;
+				position: sticky;
+				top: 0;
+				z-index: 1000;
+			}
 
-/* HEADER */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    background: #000;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
+			.header-left .logo {
+				color: white;
+				font-size: 1.4rem;
+				font-weight: bold;
+				text-decoration: none;
+			}
 
-.header-left .logo {
-    color: white;
-    font-size: 1.4rem;
-    font-weight: bold;
-    text-decoration: none;
-}
+			.header-right a {
+				color: white;
+				margin: 0 15px;
+				text-decoration: none;
+				font-size: 1.1rem;
+			}
 
-.header-right a {
-    color: white;
-    margin: 0 15px;
-    text-decoration: none;
-    font-size: 1.1rem;
-}
+			.header-right a:hover {
+				color: #00eaff;
+			}
 
-.header-right a:hover {
-    color: #00eaff;
-}
+			.login-btn {
+				padding: 8px 18px;
+				background: #00eaff;
+				border: none;
+				border-radius: 8px;
+				cursor: pointer;
+				font-weight: bold;
+				color: #000;
+				transition: 0.2s;
+			}
 
-.login-btn {
-    padding: 8px 18px;
-    background: #00eaff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #000;
-    transition: 0.2s;
-}
+			.login-btn:hover {
+				transform: scale(1.05);
+				box-shadow: 0 0 10px #00eaff;
+			}
 
-.login-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 10px #00eaff;
-}
+			/* RESPONSIVE HEADER */
+			@media (max-width: 600px) {
+				header {
+					flex-direction: column;
+					gap: 10px;
+					padding: 15px;
+				}
 
-/* RESPONSIVE HEADER */
-@media (max-width: 600px) {
-    header {
-        flex-direction: column;
-        gap: 10px;
-        padding: 15px;
-    }
+				.header-right {
+					display: flex;
+					flex-direction: column;
+					gap: 10px;
+				}
+			}
 
-    .header-right {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-}
+			/* HERO */
+			.hero {
+				height: 100vh;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+				text-align: center;
+				background: linear-gradient(180deg, #0d0d0d 0%, #111 100%);
+			}
 
-/* HERO */
-.hero {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-    background: linear-gradient(180deg, #0d0d0d 0%, #111 100%);
-}
+			.hero h1 {
+				font-size: 4rem;
+				margin: 0;
+			}
 
-.hero h1 {
-    font-size: 4rem;
-    margin: 0;
-}
+			/* APPLE INTRO */
+			.intro {
+				height: 100vh;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 40px;
+				font-size: 1.6rem;
+				opacity: 0;
+				transform: translateY(40px);
+				transition: 1s ease-out;
+				max-width: 900px;
+				margin: auto;
+				text-align: center;
+			}
 
-/* APPLE INTRO */
-.intro {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-    font-size: 1.6rem;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: 1s ease-out;
-    max-width: 900px;
-    margin: auto;
-    text-align: center;
-}
+			.intro.visible {
+				opacity: 1;
+				transform: translateY(0);
+			}
 
-.intro.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
+			/* NEUSTES PROJEKT */
+			.latest-project {
+				width: 90%;
+				max-width: 900px;
+				margin: 80px auto;
+			}
 
-/* NEUSTES PROJEKT */
-.latest-project {
-    width: 90%;
-    max-width: 900px;
-    margin: 80px auto;
-}
+			.project-card {
+				position: relative;
+				border-radius: 15px;
+				overflow: hidden;
+				cursor: pointer;
+				transition: 0.3s ease;
+				background: #111;
+			}
 
-.project-card {
-    position: relative;
-    border-radius: 15px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: 0.3s ease;
-    background: #111;
-}
+			.project-card img {
+				width: 100%;
+				display: block;
+				filter: brightness(0.85);
+				transition: 0.3s ease;
+			}
 
-.project-card img {
-    width: 100%;
-    display: block;
-    filter: brightness(0.85);
-    transition: 0.3s ease;
-}
+			.project-card:hover img {
+				filter: brightness(1);
+			}
 
-.project-card:hover img {
-    filter: brightness(1);
-}
+			.project-card:hover {
+				transform: translateY(-6px);
+				box-shadow: 0 0 20px rgba(0, 234, 255, 0.3);
+			}
 
-.project-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 0 20px rgba(0, 234, 255, 0.3);
-}
+			.project-date {
+				position: absolute;
+				top: 12px;
+				left: 12px;
+				background: rgba(0, 0, 0, 0.6);
+				padding: 6px 12px;
+				border-radius: 8px;
+				font-size: 0.9rem;
+				color: #00eaff;
+			}
 
-.project-date {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: rgba(0,0,0,0.6);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    color: #00eaff;
-}
+			.project-title {
+				position: absolute;
+				top: 12px;
+				right: 12px;
+				background: rgba(0, 0, 0, 0.6);
+				padding: 6px 12px;
+				border-radius: 8px;
+				font-size: 1rem;
+				font-weight: bold;
+			}
 
-.project-title {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: rgba(0,0,0,0.6);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-}
+			/* RESPONSIVE */
+			@media (max-width: 600px) {
+				.hero h1 {
+					font-size: 2.6rem;
+				}
+				.intro {
+					font-size: 1.2rem;
+					padding: 20px;
+				}
+			}
+		</style>
+	</head>
 
-/* RESPONSIVE */
-@media (max-width: 600px) {
-    .hero h1 {
-        font-size: 2.6rem;
-    }
-    .intro {
-        font-size: 1.2rem;
-        padding: 20px;
-    }
-}
+	<body>
+		<header>
+			<div class="header-left">
+				<a href="index.html" class="logo">CodingFactoryL</a>
+			</div>
 
-/* FOOTER */
-footer {
-    text-align: center;
-    padding: 20px;
-    margin-top: 60px;
-    color: #777;
-}
+			<div class="header-right">
+				<a href="projects.html">Projekte</a>
+				<a href="kontakt.html">Kontakt</a>
+				<button class="login-btn" onclick="window.location.href = 'login.html'">Login</button>
+			</div>
+		</header>
 
-</style>
-</head>
+		<!-- HERO -->
+		<div class="hero">
+			<h1>CodingFactoryL</h1>
+		</div>
 
-<body>
+		<!-- APPLE INTRO -->
+		<div class="intro" id="intro">Ich bin Leon – Entwickler, Bastler und Systemarchitekt. Ich baue modulare Systeme, KI‑Experimente und kreative Projekte, die Technik und Design verbinden.</div>
 
-<header>
-    <div class="header-left">
-        <a href="index.html" class="logo">CodingFactoryL</a>
-    </div>
+		<section style="margin-top: 60px; text-align: center">
+			<h2 style="font-size: 2rem; margin-bottom: 20px">Neuestes Projekt</h2>
 
-    <div class="header-right">
-        <a href="projects.html">Projekte</a>
-        <a href="kontakt.html">Kontakt</a>
-        <button class="login-btn" onclick="window.location.href='login.html'">Login</button>
-    </div>
-</header>
+			<div style="width: 90%; max-width: 900px; margin: auto; cursor: pointer" onclick="window.location.href = 'projekt-website.html'">
+				<div style="position: relative; border-radius: 15px; overflow: hidden; background: #111">
+					<img src="assets/CodingFactoryL und 8 weitere Seiten - Persönlich – Microsoft​ Edge 07.01.2026 18_59_35.png" style="width: 100%; display: block; filter: brightness(0.85)" />
 
-<!-- HERO -->
-<div class="hero">
-    <h1>CodingFactoryL</h1>
-</div>
+					<div style="position: absolute; top: 12px; left: 12px; background: rgba(0, 0, 0, 0.6); padding: 6px 12px; border-radius: 8px; color: #00eaff">Januar 2026</div>
 
-<!-- APPLE INTRO -->
-<div class="intro" id="intro">
-    Ich bin Leon – Entwickler, Bastler und Systemarchitekt.  
-    Ich baue modulare Systeme, KI‑Experimente und kreative Projekte,  
-    die Technik und Design verbinden.
-</div>
+					<div style="position: absolute; top: 12px; right: 12px; background: rgba(0, 0, 0, 0.6); padding: 6px 12px; border-radius: 8px; font-weight: bold">Website</div>
+				</div>
+			</div>
+		</section>
 
-<section style="margin-top: 60px; text-align: center;">
-    <h2 style="font-size: 2rem; margin-bottom: 20px;">Neuestes Projekt</h2>
+		<script>
+			/* APPLE INTRO SCROLL */
+			function revealIntro() {
+				const intro = document.getElementById("intro");
+				const rect = intro.getBoundingClientRect();
+				if (rect.top < window.innerHeight - 80) {
+					intro.classList.add("visible");
+				}
+			}
+			window.addEventListener("scroll", revealIntro);
+			revealIntro();
 
-    <div style="width: 90%; max-width: 900px; margin: auto; cursor: pointer;"
-         onclick="window.location.href='projekt-website.html'">
+			// Sortieren nach Datum (neu → alt)
+			projects.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        <div style="position: relative; border-radius: 15px; overflow: hidden; background: #111;">
-            <img src="assets/CodingFactoryL und 8 weitere Seiten - Persönlich – Microsoft​ Edge 07.01.2026 18_59_35.png" 
-                 style="width: 100%; display: block; filter: brightness(0.85);">
+			const latest = projects[0];
 
-            <div style="position: absolute; top: 12px; left: 12px; 
-                        background: rgba(0,0,0,0.6); padding: 6px 12px; 
-                        border-radius: 8px; color: #00eaff;">
-                Januar 2026
-            </div>
-
-            <div style="position: absolute; top: 12px; right: 12px; 
-                        background: rgba(0,0,0,0.6); padding: 6px 12px; 
-                        border-radius: 8px; font-weight: bold;">
-                Website
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<script>
-/* APPLE INTRO SCROLL */
-function revealIntro() {
-    const intro = document.getElementById("intro");
-    const rect = intro.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 80) {
-        intro.classList.add("visible");
-    }
-}
-window.addEventListener("scroll", revealIntro);
-revealIntro();
-
-
-
-// Sortieren nach Datum (neu → alt)
-projects.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-const latest = projects[0];
-
-document.getElementById("latestProjectContainer").innerHTML = `
+			document.getElementById("latestProjectContainer").innerHTML = `
     <div class="project-card" onclick="window.location.href='${latest.link}'">
         <img src="${latest.img}">
         <div class="project-date">${latest.date.split("-")[0]}</div>
         <div class="project-title">${latest.title}</div>
     </div>
 `;
-</script>
+		</script>
 
-<!-- SOCIAL MEDIA SECTION -->
-<section style="margin-top: 80px; text-align: center;">
-    <h2 style="font-size: 2rem; margin-bottom: 20px;">Folge mir auf Social Media</h2>
+		<!-- SOCIAL MEDIA SECTION -->
+		<section style="margin-top: 80px; text-align: center">
+			<h2 style="font-size: 2rem; margin-bottom: 20px">Folge mir auf Social Media</h2>
 
-    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+			<div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap">
+				<!-- GitHub -->
+				<a href="https://github.com/CodingFactoryL12" target="_blank" style="padding: 12px 20px; background: #111; border-radius: 10px; color: #00eaff; text-decoration: none; font-weight: bold">
+					GitHub
+				</a>
 
-        <!-- GitHub -->
-        <a href="https://github.com/CodingFactoryL12" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #00eaff; text-decoration: none; font-weight: bold;">
-            GitHub
-        </a>
+				<!-- YouTube -->
+				<a href="https://www.youtube.com/@CodingFactoryL" target="_blank" style="padding: 12px 20px; background: #111; border-radius: 10px; color: #ff4d4d; text-decoration: none; font-weight: bold">
+					YouTube
+				</a>
 
-        <!-- YouTube -->
-        <a href="https://www.youtube.com/@CodingFactoryL" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #ff4d4d; text-decoration: none; font-weight: bold;">
-            YouTube
-        </a>
+				<!-- Instagram -->
+				<a href="https://instagram.com/CodingL_YT" target="_blank" style="padding: 12px 20px; background: #111; border-radius: 10px; color: #ff66cc; text-decoration: none; font-weight: bold">
+					Instagram
+				</a>
 
-        <!-- Instagram -->
-        <a href="https://instagram.com/CodingL_YT" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #ff66cc; text-decoration: none; font-weight: bold;">
-            Instagram
-        </a>
+				<!-- Discord -->
+				<a href="https://discord.gg/CodingFactoryL" target="_blank" style="padding: 12px 20px; background: #111; border-radius: 10px; color: #7289da; text-decoration: none; font-weight: bold">
+					Discord
+				</a>
 
-        <!-- Discord -->
-        <a href="https://discord.gg/CodingFactoryL" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #7289da; text-decoration: none; font-weight: bold;">
-            Discord
-        </a>
+				<!-- E-Mail -->
+				<a href="mailto:leon.f662011@gmail.com" style="padding: 12px 20px; background: #111; border-radius: 10px; color: #00ff99; text-decoration: none; font-weight: bold"> E‑Mail </a>
 
-        <!-- E-Mail -->
-        <a href="mailto:leon.f662011@gmail.com"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #00ff99; text-decoration: none; font-weight: bold;">
-            E‑Mail
-        </a>
+				<!-- gutefrage -->
+				<a
+					href="https://www.gutefrage.net/nutzer/MarkusGemke"
+					target="_blank"
+					style="padding: 12px 20px; background: #111; border-radius: 10px; color: #00c8ff; text-decoration: none; font-weight: bold"
+				>
+					gutefrage
+				</a>
 
-        <!-- gutefrage -->
-        <a href="https://www.gutefrage.net/nutzer/MarkusGemke" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #00c8ff; text-decoration: none; font-weight: bold;">
-            gutefrage
-        </a>
+				<!-- Reddit -->
+				<a href="https://reddit.com/user/Ok_Number_1895" target="_blank" style="padding: 12px 20px; background: #111; border-radius: 10px; color: #ff4500; text-decoration: none; font-weight: bold">
+					Reddit
+				</a>
 
-        <!-- Reddit -->
-        <a href="https://reddit.com/user/Ok_Number_1895" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #ff4500; text-decoration: none; font-weight: bold;">
-            Reddit
-        </a>
+				<!-- Xbox -->
+				<a
+					href="https://account.xbox.com/de-de/Profile?Gamertag=CodingL_YT"
+					target="_blank"
+					style="padding: 12px 20px; background: #111; border-radius: 10px; color: #44d62c; text-decoration: none; font-weight: bold"
+				>
+					Xbox
+				</a>
 
-        <!-- Xbox -->
-        <a href="https://account.xbox.com/de-de/Profile?Gamertag=CodingL_YT" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #44d62c; text-decoration: none; font-weight: bold;">
-            Xbox
-        </a>
+				<!-- Epic Games -->
+				<a
+					href="https://store.epicgames.com/u/CodingFactoryL_Y"
+					target="_blank"
+					style="padding: 12px 20px; background: #111; border-radius: 10px; color: #ffffff; text-decoration: none; font-weight: bold"
+				>
+					Epic Games
+				</a>
+			</div>
+		</section>
 
-        <!-- Epic Games -->
-        <a href="https://store.epicgames.com/u/CodingFactoryL_Y" target="_blank"
-           style="padding: 12px 20px; background: #111; border-radius: 10px;
-                  color: #ffffff; text-decoration: none; font-weight: bold;">
-            Epic Games
-        </a>
-
-    </div>
-</section>
-
-
-<footer>
-    © 2025 CodingFactoryL – Alle Rechte vorbehalten
-</footer>
-
-</body>
+		<script src="footer.js"></script>
+		<custom-footer></custom-footer>
+	</body>
 </html>

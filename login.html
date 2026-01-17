@@ -1,102 +1,103 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>Login – CodingFactoryL</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Login – CodingFactoryL</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<style>
-body {
-    background: #0d0d0d;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding-top: 120px;
-}
+		<style>
+			body {
+				background: #0d0d0d;
+				color: white;
+				font-family: Arial, sans-serif;
+				text-align: center;
+				padding-top: 120px;
+			}
 
-.login-box {
-    background: #111;
-    padding: 40px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 400px;
-    margin: auto;
-    box-shadow: 0 0 20px rgba(0, 234, 255, 0.2);
-}
+			.login-box {
+				background: #111;
+				padding: 40px;
+				border-radius: 20px;
+				width: 90%;
+				max-width: 400px;
+				margin: auto;
+				box-shadow: 0 0 20px rgba(0, 234, 255, 0.2);
+			}
 
-/* Einheitliche Breite für Inputs und Buttons */
-input, .login-btn {
-    width: 100%;
-    box-sizing: border-box;
-}
+			/* Einheitliche Breite für Inputs und Buttons */
+			input,
+			.login-btn {
+				width: 100%;
+				box-sizing: border-box;
+			}
 
-input {
-    padding: 14px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    background: #0d0d0d;
-    color: white;
-    font-size: 1rem;
-}
+			input {
+				padding: 14px;
+				margin-bottom: 20px;
+				border-radius: 10px;
+				border: 1px solid #333;
+				background: #0d0d0d;
+				color: white;
+				font-size: 1rem;
+			}
 
-input:focus {
-    border-color: #00eaff;
-    outline: none;
-}
+			input:focus {
+				border-color: #00eaff;
+				outline: none;
+			}
 
-.login-btn {
-    padding: 14px;
-    background: #00eaff;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    color: #000;
-    margin-bottom: 10px;
-}
+			.login-btn {
+				padding: 14px;
+				background: #00eaff;
+				border: none;
+				border-radius: 10px;
+				font-size: 1.2rem;
+				font-weight: bold;
+				cursor: pointer;
+				color: #000;
+				margin-bottom: 10px;
+			}
 
-.login-btn:hover {
-    background: #00bcd4;
-}
+			.login-btn:hover {
+				background: #00bcd4;
+			}
 
-a {
-    color: #00eaff;
-    text-decoration: none;
-}
-</style>
-</head>
+			a {
+				color: #00eaff;
+				text-decoration: none;
+			}
+		</style>
+	</head>
 
-<body>
+	<body>
+		<div class="login-box">
+			<h1>Login</h1>
 
-<div class="login-box">
-    <h1>Login</h1>
+			<input id="username" type="text" placeholder="Benutzername" required />
+			<input id="password" type="password" placeholder="Passwort" required />
 
-    <input id="username" type="text" placeholder="Benutzername" required>
-    <input id="password" type="password" placeholder="Passwort" required>
+			<button class="login-btn" onclick="login()">Einloggen</button>
 
-    <button class="login-btn" onclick="login()">Einloggen</button>
+			<p>Noch keinen Account? <a href="register.html">Registrieren</a></p>
+		</div>
 
-    <p>Noch keinen Account? <a href="register.html">Registrieren</a></p>
-</div>
+		<script>
+			function login() {
+				const user = document.getElementById("username").value;
+				const pass = document.getElementById("password").value;
 
-<script>
-function login() {
-    const user = document.getElementById("username").value;
-    const pass = document.getElementById("password").value;
+				const users = JSON.parse(localStorage.getItem("users")) || {};
 
-    const users = JSON.parse(localStorage.getItem("users")) || {};
+				if (!users[user] || users[user].password !== pass) {
+					alert("Falsche Login-Daten");
+					return;
+				}
 
-    if (!users[user] || users[user].password !== pass) {
-        alert("Falsche Login-Daten");
-        return;
-    }
-
-    localStorage.setItem("loggedInUser", user);
-    window.location.href = "dashboard.html";
-}
-</script>
-
-</body>
+				localStorage.setItem("loggedInUser", user);
+				window.location.href = "dashboard.html";
+			}
+		</script>
+		<script src="footer.js"></script>
+		<custom-footer></custom-footer>
+	</body>
 </html>
